@@ -13,6 +13,12 @@ class Reshape(BackendHandler):
 
   @classmethod
   def _common(cls, node, **kwargs):
+    return [
+      cls.make_tensor_from_onnx_node(node)
+    ]
+
+
+  def _common1(cls, node, **kwargs):
     tensor = kwargs["tensor_dict"][node.inputs[0]]
     if cls.SINCE_VERSION == 1:
       shape = tf.constant(node.attrs["shape"], dtype=tf.int32)
