@@ -13,8 +13,20 @@ class Reshape(BackendHandler):
 
   @classmethod
   def _common(cls, node, **kwargs):
+    tensor = kwargs["tensor_dict"][node.inputs[0]]
+    if cls.SINCE_VERSION == 1:
+      shape = tf.constant(node.attrs["shape"], dtype=tf.int32)
+    else:  # since_version >= 5
+      shape = tf.cast(kwargs["tensor_dict"][node.inputs[1]], tf.int32)
+    input_shape = tf.shape(tensor, out_type=tf.int32)
+
+
+    copied_shape = shape
+    attrs = copy.deepcopy(node.attrs)
+    attrs.pop("shape", None)
     return [
-      cls.make_tensor_from_onnx_node(node)
+      cls.make_tensor_from_onnx_node(
+        node, inputs=[tensor, copied_shape], attrs=attrs, **kwargs)
     ]
 
 
