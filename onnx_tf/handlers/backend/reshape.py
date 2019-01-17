@@ -24,8 +24,9 @@ class Reshape(BackendHandler):
     # a copy from the original dimension size is needed.
     copy_indices = tf.squeeze(
         tf.where(tf.equal(shape, tf.constant(0, dtype=tf.int32))), -1)
-
+    copy_indices = tf.cast(copy_indices, tf.int32)
     indices_gathered = tf.gather(input_shape, copy_indices)
+    indices_gathered = tf.cast(indices_gathered, tf.int32)
     indices_scattered = tf.sparse_to_dense(copy_indices,
                                            tf.cast(tf.shape(shape), tf.int32),
                                            indices_gathered)
