@@ -19,7 +19,7 @@ class Compress(BackendHandler):
 
     x = tf.reshape(x, [-1]) if node.attrs.get("axis") is None else x
 
-    indices = tf.constant(list(range(condition.shape[0])), dtype=tf.int64)
+    indices = tf.constant(list(range(condition.shape[0])), dtype=tf.int32)
     not_zero = tf.not_equal(condition, tf.zeros_like(condition))
     attrs['indices'] = tf.boolean_mask(indices, not_zero)
 

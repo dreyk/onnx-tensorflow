@@ -23,7 +23,7 @@ class TopK(BackendHandler):
       x = tf.transpose(x, perm=pre_perm)
       values, indices = tf.nn.top_k(x, k=node.attrs["k"])
       values = tf.transpose(values, perm=post_perm)
-      return [values, tf.cast(indices, dtype=tf.int64)]
+      return [values, tf.cast(indices, dtype=tf.int32)]
 
     values, indices = tf.nn.top_k(x, k=node.attrs["k"])
-    return [values, tf.cast(indices, dtype=tf.int64)]
+    return [values, tf.cast(indices, dtype=tf.int32)]

@@ -38,9 +38,26 @@ def tf2onnx(dtype):
       onnx_dtype = TensorProto.UNDEFINED
     return onnx_dtype
 
+TENSOR_TYPE_TO_NP_TYPE = {
+  int(TensorProto.FLOAT): np.dtype('float32'),
+  int(TensorProto.UINT8): np.dtype('uint8'),
+  int(TensorProto.INT8): np.dtype('int8'),
+  int(TensorProto.UINT16): np.dtype('uint16'),
+  int(TensorProto.INT16): np.dtype('int16'),
+  int(TensorProto.INT32): np.dtype('int32'),
+  int(TensorProto.INT64): np.dtype('int32'),
+  int(TensorProto.BOOL): np.dtype('bool'),
+  int(TensorProto.FLOAT16): np.dtype('float16'),
+  int(TensorProto.DOUBLE): np.dtype('float32'),
+  int(TensorProto.COMPLEX64): np.dtype('complex64'),
+  int(TensorProto.COMPLEX128): np.dtype('complex128'),
+  int(TensorProto.UINT32): np.dtype('uint32'),
+  int(TensorProto.UINT64): np.dtype('uint32'),
+  int(TensorProto.STRING): np.dtype(np.object)
+}
 
 def onnx2tf(dtype):
-  return tf.as_dtype(mapping.TENSOR_TYPE_TO_NP_TYPE[_onnx_dtype(dtype)])
+  return tf.as_dtype(TENSOR_TYPE_TO_NP_TYPE[_onnx_dtype(dtype)])
 
 
 def onnx2field(dtype):

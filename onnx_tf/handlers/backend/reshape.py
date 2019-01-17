@@ -15,19 +15,19 @@ class Reshape(BackendHandler):
   def _common(cls, node, **kwargs):
     tensor = kwargs["tensor_dict"][node.inputs[0]]
     if cls.SINCE_VERSION == 1:
-      shape = tf.constant(node.attrs["shape"], dtype=tf.int64)
+      shape = tf.constant(node.attrs["shape"], dtype=tf.int32)
     else:  # since_version >= 5
-      shape = tf.cast(kwargs["tensor_dict"][node.inputs[1]], tf.int64)
-    input_shape = tf.shape(tensor, out_type=tf.int64)
+      shape = tf.cast(kwargs["tensor_dict"][node.inputs[1]], tf.int32)
+    input_shape = tf.shape(tensor, out_type=tf.int32)
 
     # Extract indicies of the shape paramter where
     # a copy from the original dimension size is needed.
     copy_indices = tf.squeeze(
-        tf.where(tf.equal(shape, tf.constant(0, dtype=tf.int64))), -1)
+        tf.where(tf.equal(shape, tf.constant(0, dtype=tf.int32))), -1)
 
     indices_gathered = tf.gather(input_shape, copy_indices)
     indices_scattered = tf.sparse_to_dense(copy_indices,
-                                           tf.cast(tf.shape(shape), tf.int64),
+                                           tf.cast(tf.shape(shape), tf.int32),
                                            indices_gathered)
 
     # Perform the copy wherever requested (wherever dim_size == 0)
